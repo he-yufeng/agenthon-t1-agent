@@ -1,0 +1,32 @@
+{
+  "candidate_engine_sha256": "1c85bae327299e6eeacf7f1c788dfd5bf93d8f3c67a45e723280f37aaa4bef3a",
+  "competition_task_data": false,
+  "credential_files": false,
+  "expected_synthetic_tests": 87,
+  "files": {
+    ".dockerignore": "86333537e3c7a5c67104af0c077b4c26da3da01e4dc58864285ba3c7854aff37",
+    ".github/workflows/publish.yml": "55dec8728fd96df81bc369e4adf5339492305cb63a35f02e56caf82d02825e0f",
+    ".gitignore": "3145cad6334e50569867009110cfe140ed7a046e9f09ec03ec33611b5f22f098",
+    "LICENSE": "1a3a659f51882dde4f1cc8e35d9a5da2343e0c696f9b114ffe7af5f51ea6f71a",
+    "README.md": "51f2d6c432b90855ccad9055a9317f18196e89bc76a576b9a81e4f48084c96ec",
+    "ci/publish.Dockerfile": "f43433bbac5fc4c32a19350bc7364e753603ca625d68581dde10ff291ae5a8a1",
+    "ci/record_release.py": "e00861b5970a6cb205c7a686ea1c39a8f7d9758d63c333c69d0325e5b130b90b",
+    "ci/test_image.py": "c829123e80d07511d8d89b7293afcc10706cce0b73348174869fbda645164260",
+    "ci/verify_manifest.py": "10b69be3a8ee1ab016152fe805377299f9d7854fc297ac1e466f20e5ac778528",
+    "diagnostics/header_deadline.py": "19889c23f62077c7b4b43a4b7f7cd2fd56dda0c0f47e552afc23624e3a25ee64",
+    "submission/.dockerignore": "1cd45b56aff3da62cd4ecd8a7ef01d25c42ff5a76ad41317f21fd2aa8957d1d8",
+    "submission/Dockerfile": "5edc813a62e73d5d49130c59e014922726cfcd59c78659b5bc39818ca77b6509",
+    "submission/agent.py": "4efdb88dbb384fc6ec966c86e59ac4db0c5734fe8a6e851e92a0c7009d21b8e1",
+    "submission/base/requirements-sandbox.lock": "42deec22432f136a842c01832c12d26a2900e7bfdbf2cdb9c5b9b4b7eb2bed79",
+    "submission/base/requirements-sandbox.lock.sha256": "845bf6b707416b72d04be2eb9bbc8b478ae6db692073cfda505b1a0195cf019d",
+    "submission/base/smoke_imports.py": "353bc2295296b2643b0b8ca4c685e80e3abdf7f725612c1d14fd408c7a0524cd",
+    "submission/engine.py": "1c85bae327299e6eeacf7f1c788dfd5bf93d8f3c67a45e723280f37aaa4bef3a",
+    "submission/tests/test_agent.py": "3b1b336b79d7f6de3057b86d1a69cb5d43dd047ace3fdfaa0972e99e840555e5",
+    "submission/tests/test_container_contract.py": "0ae23aba455a5b5996006af070fc5ba3eaab3d0058d3f5f392304d1f4951638c",
+    "submission/tests/test_http_deadline.py": "0cac34fc6927c26808bebe7033e7066913658161ca4b71e6ccf850bb67e751ee"
+  },
+  "official_score": null,
+  "participant_license": "MIT",
+  "prepared_at_utc": "2026-10-02T08:23:25.234894+00:00",
+  "schema": "agenthon-publication-source/v1"
+}

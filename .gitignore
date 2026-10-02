@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+native-test.log
+image-inspect.json
+publish.log
+release-receipt.json
+.env
+*password*
+*team-key*
+账号密码.md
+receipts/

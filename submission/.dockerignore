@@ -1,0 +1,10 @@
+**
+!Dockerfile
+!.dockerignore
+!agent.py
+!engine.py
+!base/
+base/**
+!base/requirements-sandbox.lock
+!base/requirements-sandbox.lock.sha256
+!base/smoke_imports.py
