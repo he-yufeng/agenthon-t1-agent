@@ -37,3 +37,18 @@ Participant code is MIT-licensed. Third-party dependencies retain their own
 licenses and package metadata. The pinned financial sandbox dependency list
 was derived from the official public kit; no task data are redistributed.
 The license for participant code is also included in the published image.
+# Isolated review strategy candidate
+
+This branch adds a generic execution-then-same-House-review strategy on the
+unchanged frozen participant core. It uses at most three logical calls with one
+card-bounded deadline and preserves the last complete policy-valid attempt if
+later review/repair fails. Policy violations remain fatal. Generated output bytes
+are not fed back to the model. Task-specific self-checks are requested in code;
+they are not the organizer's verifier or proof of mathematical correctness.
+
+The 22 small authored-fixture tests prove control flow and safety boundaries,
+not actual House critique quality or a competition score improvement. The new
+native CI overlay must load actual image modules under the same reduced runtime
+limits. It uses the immutable original image as base, keeps original tags and
+main unchanged, and publishes only a new `review-<commit>` tag after validation.
+No task answers, real credentials, private logs or model calls are included.
