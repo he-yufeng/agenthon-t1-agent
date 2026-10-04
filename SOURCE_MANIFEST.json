@@ -1,0 +1,24 @@
+{
+  "schema": "agenthon-nonthinking-base-source/v1",
+  "base_commit": "a559d9c62899e15043cb288399b17a2e530a9cb7",
+  "base_image": "sha256:0f74d9bdd86d8ed19e7387d3bd2144c1a956602a41390ec70df55f1a6e86da8e",
+  "git_ancestry_claimed": false,
+  "provenance": "Original worktree mmap failed; isolated own explicit source copy verified by hashes",
+  "files": {
+    ".dockerignore": "14028132800c714bb124eeb6e543172676686c1991c2be5b5b6f514424841c85",
+    ".github/workflows/publish.yml": "01eece3f89c2630dd4d394a2aab9ddfc74f2bea60cdc33cd5fe9025ccf3cd800",
+    "LICENSE": "1a3a659f51882dde4f1cc8e35d9a5da2343e0c696f9b114ffe7af5f51ea6f71a",
+    "README.md": "78b5215aac66093be07341619c923386a3aa851bd628286ddbce983208d131d6",
+    "candidate_nonthinking_base_r03/PROTOCOL.md": "4040b1557c10b8a4cddd474376c71caf7e4da7dabb6e77eb0b3e4943977d41d8",
+    "candidate_nonthinking_base_r03/agent.py": "25a4ee47af08a39d338e2ef4e4d25e5da60fb8370dc938f25ed866c8b5763019",
+    "candidate_nonthinking_base_r03/test_baseline_cli.py": "b9a0f2b5118c91ec81e9546bec4bb00b8484e22a36c590670f77f38084d80823",
+    "candidate_nonthinking_base_r03/test_thinking_control.py": "b3cf8db5a5565d8547695273c4e6f9cb1ad421747831f5a70c56d10b81566268",
+    "candidate_nonthinking_base_r03/thinking_control.py": "241aacc5718e8e7d7abab0785297a054499b53626f5aa6789cbb2839b25ac6ef",
+    "ci/nonthinking.Dockerfile": "a633a093cfd731002f6d195be3af1c66efe599d0af9876e5b34bf03203524ca2",
+    "ci/record_nonthinking_release.py": "4bc9fb2d67d50913f0a29590ad4493614cb2dc1a92039dffa3ae7379e0c8125c",
+    "ci/test_nonthinking_image.py": "fce52d521788c228bd0f306d73b43959b41f929ce149c96a247b19d4fc98f9ad",
+    "ci/verify_manifest.py": "10b69be3a8ee1ab016152fe805377299f9d7854fc297ac1e466f20e5ac778528",
+    "submission/agent.py": "4efdb88dbb384fc6ec966c86e59ac4db0c5734fe8a6e851e92a0c7009d21b8e1",
+    "submission/engine.py": "1c85bae327299e6eeacf7f1c788dfd5bf93d8f3c67a45e723280f37aaa4bef3a"
+  }
+}
