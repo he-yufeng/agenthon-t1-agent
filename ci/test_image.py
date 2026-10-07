@@ -1,5 +1,6 @@
 """Run the frozen synthetic suite using source copied from the actual image."""
 import hashlib
+import importlib.util
 import io
 import json
 import os
@@ -67,16 +68,32 @@ def main():
         shutil.copytree(source / 'diagnostics', root / 'diagnostics')
         sys.path.insert(0, str(submission))
         suite = unittest.defaultTestLoader.discover(str(submission / 'tests'))
+        if suite.countTestCases() != 87:
+            raise RuntimeError('original suite count changed')
+        extra = root / 'r04'
+        shutil.copytree(source / 'r04', extra)
+        (extra / 'candidate').mkdir()
+        shutil.copyfile(Path('/agent/engine.py'), extra / 'candidate/engine.py')
+        sys.path.insert(0, str(extra))
+        spec = importlib.util.spec_from_file_location('test_path_join_r04', extra / 'test_path_join.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[spec.name] = module
+        spec.loader.exec_module(module)
+        additional = unittest.defaultTestLoader.loadTestsFromModule(module)
+        if additional.countTestCases() != 18:
+            raise RuntimeError('new regression count changed')
+        suite = unittest.TestSuite([suite, additional])
         identities = test_ids(suite)
         logs = io.StringIO()
         result = unittest.TextTestRunner(stream=logs, verbosity=2).run(suite)
-        report = {'status':'PASS' if result.wasSuccessful() and result.testsRun == 87
+        report = {'status':'PASS' if result.wasSuccessful() and result.testsRun == 105
             and not result.skipped else 'FAIL', 'checks':checks,
             'image_sources':image_sources, 'tests_run':result.testsRun,
             'tests':identities, 'failures':result.failures, 'errors':result.errors,
             'skips':result.skipped, 'python':platform.python_version(),
             'machine':platform.machine(), 'wall_seconds':time.monotonic()-started,
-            'official_score':None}
+            'official_score':None, 'real_house_calls':0,
+            'scope':'REAL_IMAGE_ORIGINAL87_PLUS_NEW18_SYNTHETIC_NOT_METHOD_QUALITY'}
         print(logs.getvalue(), flush=True)
         print('NATIVE_TEST_RESULT=' + json.dumps(report, sort_keys=True), flush=True)
         return 0 if report['status'] == 'PASS' else 1

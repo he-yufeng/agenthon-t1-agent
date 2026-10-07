@@ -1149,6 +1149,69 @@ def rewrite_legacy_input_literals(code: str, task_dir: Path, instruction: str) -
         "filepath_or_buffer",
     }
 
+    # A join is a path API only when an explicit module-level import identifies
+    # the standard-library function. Do not rewrite str.join or user functions
+    # named join; conservatively leave rebinding/dynamic-namespace cases intact.
+    imports: dict[str, list[str]] = {}
+    for statement in tree.body:
+        if isinstance(statement, ast.Import):
+            for alias in statement.names:
+                name = alias.asname or alias.name.split(".")[0]
+                origin = alias.name if alias.asname else alias.name.split(".")[0]
+                imports.setdefault(name, []).append(origin)
+        elif isinstance(statement, ast.ImportFrom):
+            for alias in statement.names:
+                name = alias.asname or alias.name
+                origin = f"{statement.module}.{alias.name}" if statement.level == 0 else "relative-import"
+                imports.setdefault(name, []).append(origin)
+
+    rebound: set[str] = set()
+    dynamic_namespace = False
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Name) and isinstance(node.ctx, (ast.Store, ast.Del)):
+            rebound.add(node.id)
+        elif isinstance(node, ast.arg):
+            rebound.add(node.arg)
+        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            rebound.add(node.name)
+        elif isinstance(node, ast.ExceptHandler) and node.name:
+            rebound.add(node.name)
+        elif (hasattr(ast, "MatchAs") and isinstance(node, (ast.MatchAs, ast.MatchStar))
+              and node.name):
+            rebound.add(node.name)
+        elif hasattr(ast, "MatchMapping") and isinstance(node, ast.MatchMapping) and node.rest:
+            rebound.add(node.rest)
+        elif isinstance(node, (ast.Import, ast.ImportFrom)) and node not in tree.body:
+            # Imports bind names without ast.Name(Store), including nested scopes.
+            for alias in node.names:
+                if alias.name == "*":
+                    dynamic_namespace = True
+                name = alias.asname or (alias.name.split(".")[0] if isinstance(node, ast.Import)
+                                        else alias.name)
+                rebound.add(name)
+        elif isinstance(node, ast.ImportFrom) and any(a.name == "*" for a in node.names):
+            dynamic_namespace = True
+        elif isinstance(node, ast.Attribute) and isinstance(node.ctx, (ast.Store, ast.Del)):
+            base = node
+            while isinstance(base, ast.Attribute):
+                base = base.value
+            if isinstance(base, ast.Name) and base.id in imports:
+                dynamic_namespace = True
+        elif isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+            if node.func.id in {"exec", "eval", "globals", "locals", "vars", "setattr", "delattr"}:
+                dynamic_namespace = True
+    join_calls: set[tuple[str, ...]] = set()
+    if not dynamic_namespace:
+        for name, origins in imports.items():
+            if name in rebound or len(origins) != 1:
+                continue
+            if origins[0] == "os":
+                join_calls.add((name, "path", "join"))
+            elif origins[0] == "os.path":
+                join_calls.add((name, "join"))
+            elif origins[0] == "os.path.join":
+                join_calls.add((name,))
+
     class LiteralRewriter(ast.NodeTransformer):
         changed = False
 
@@ -1172,6 +1235,30 @@ def rewrite_legacy_input_literals(code: str, task_dir: Path, instruction: str) -
 
         def visit_Call(self, node: ast.Call) -> ast.AST:
             self.generic_visit(node)
+            parts = []
+            function = node.func
+            while isinstance(function, ast.Attribute):
+                parts.append(function.attr)
+                function = function.value
+            if isinstance(function, ast.Name):
+                parts.append(function.id)
+            else:
+                parts.clear()
+            if tuple(reversed(parts)) in join_calls:
+                if (node.args and not node.keywords
+                        and all(isinstance(arg, ast.Constant) and isinstance(arg.value, str)
+                                for arg in node.args)):
+                    joined = os.path.join(*(arg.value for arg in node.args))
+                    if ".." in joined.split("/"):
+                        return node
+                    if joined in absolute:
+                        self.changed = True
+                        return ast.copy_location(ast.Constant(absolute[joined]), node)
+                node.args = [self.rewrite_argument(arg) for arg in node.args]
+                for keyword in node.keywords:
+                    if keyword.arg == "a":
+                        keyword.value = self.rewrite_argument(keyword.value)
+                return node
             if self.call_name(node.func) not in path_call_names:
                 return node
             if node.args:
