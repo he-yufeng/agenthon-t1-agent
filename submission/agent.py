@@ -9,7 +9,8 @@ import os
 import sys
 from pathlib import Path
 
-from engine import EndpointError, OpenAICompatibleClient, solve
+from engine import EndpointError, OpenAICompatibleClient
+from input_profile_r05 import solve
 
 
 def parser() -> argparse.ArgumentParser:

@@ -1,0 +1,21 @@
+{
+  "schema": "input-context-r05-public-source/v1",
+  "files": {
+    "submission/agent.py": "54e1e6e0e95873e0e5d5b668b6cd454c377c9dc5f6048f298b46cdd6585c89e3",
+    "submission/engine.py": "1c85bae327299e6eeacf7f1c788dfd5bf93d8f3c67a45e723280f37aaa4bef3a",
+    "LICENSE": "1a3a659f51882dde4f1cc8e35d9a5da2343e0c696f9b114ffe7af5f51ea6f71a",
+    "input_context_r05/input_profile_r05.py": "ed93bb6974c47ef8994be88417342af243ca7963383253b338de6e062877b50e",
+    "input_context_r05/test_input_profile.py": "538e900ce3c29b4ab66e4fbb277ae8f7fb8d723ed3a80ba94f90785d4186a83d",
+    "input_context_r05/test_parquet_native.py": "4c3ab5e2c30ff22aaa7c131658d1f410d6ba514662990e4706f836acfb27c62b",
+    "input_context_r05/PUBLIC_PROTOCOL.md": "19fa903966e8e6cc35aba757337ad50cc9a5959c9a3df110d38e41befa1c1d60",
+    "ci/input_context_r05.Dockerfile": "1df388e776186b2e7dd5dab15f3aa4c8aa2635e5a649444a28265bd555655b26",
+    "ci/derive_input_context_r05.py": "dbc6c9825b55773f7417ed3d713f1fc4c44dea5015ad6689310c8bb5f4f4344b",
+    "ci/test_input_context_r05_image.py": "3dfe68e367e14c05a8fa347d450d72ddbb97a85df4116b2e668a747d59e43fbf",
+    "ci/record_input_context_r05.py": "c9edf7de7622b0777a4a90d3d51c2cea3048d6c8702510f8132b94fe85eaa068",
+    ".github/workflows/publish.yml": "a52e8dcc61389874faf9c434a3589e5d1c598cfc542f1b1d48ccb52924bfb848"
+  },
+  "standard_library_tests": 28,
+  "mandatory_native_parquet_tests": 1,
+  "real_house_quality_known": false,
+  "base_image": "ghcr.io/he-yufeng/agenthon-t1-agent@sha256:0f74d9bdd86d8ed19e7387d3bd2144c1a956602a41390ec70df55f1a6e86da8e"
+}
