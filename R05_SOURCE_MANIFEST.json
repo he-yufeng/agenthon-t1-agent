@@ -9,7 +9,8 @@
     "input_context_r05/test_parquet_native.py": "4c3ab5e2c30ff22aaa7c131658d1f410d6ba514662990e4706f836acfb27c62b",
     "input_context_r05/PUBLIC_PROTOCOL.md": "19fa903966e8e6cc35aba757337ad50cc9a5959c9a3df110d38e41befa1c1d60",
     "ci/input_context_r05.Dockerfile": "1df388e776186b2e7dd5dab15f3aa4c8aa2635e5a649444a28265bd555655b26",
-    "ci/derive_input_context_r05.py": "dbc6c9825b55773f7417ed3d713f1fc4c44dea5015ad6689310c8bb5f4f4344b",
+    "ci/input_context_r05.Dockerfile.dockerignore": "af11f4c4d9e3f774e6e00cc1693ca9120039336c70d427f00ee98fb3ee590f67",
+    "ci/derive_input_context_r05.py": "1923a0a0c8530162215c271be6e4f41de2531b01b13a1379139d30595a8ea665",
     "ci/test_input_context_r05_image.py": "3dfe68e367e14c05a8fa347d450d72ddbb97a85df4116b2e668a747d59e43fbf",
     "ci/record_input_context_r05.py": "c9edf7de7622b0777a4a90d3d51c2cea3048d6c8702510f8132b94fe85eaa068",
     ".github/workflows/publish.yml": "a52e8dcc61389874faf9c434a3589e5d1c598cfc542f1b1d48ccb52924bfb848"

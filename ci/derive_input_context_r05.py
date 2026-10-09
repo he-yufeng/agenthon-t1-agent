@@ -9,7 +9,7 @@ FILES = (
     "submission/agent.py", "submission/engine.py", "LICENSE",
     "input_context_r05/input_profile_r05.py", "input_context_r05/test_input_profile.py",
     "input_context_r05/test_parquet_native.py", "input_context_r05/PUBLIC_PROTOCOL.md",
-    "ci/input_context_r05.Dockerfile", "ci/derive_input_context_r05.py",
+    "ci/input_context_r05.Dockerfile", "ci/input_context_r05.Dockerfile.dockerignore", "ci/derive_input_context_r05.py",
     "ci/test_input_context_r05_image.py", "ci/record_input_context_r05.py", ".github/workflows/publish.yml",
 )
 
