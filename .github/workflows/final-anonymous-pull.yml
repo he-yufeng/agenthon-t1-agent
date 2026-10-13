@@ -1,0 +1,63 @@
+name: Final anonymous immutable image admission
+on:
+  push:
+    branches: [admission/anonymous-final-pull-20261014]
+    paths: [.github/workflows/final-anonymous-pull.yml]
+permissions: {}
+concurrency:
+  group: agenthon-final-anonymous-pull-20261014
+  cancel-in-progress: false
+jobs:
+  anonymous-pull:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Anonymous pull of the unchanged best image
+        env:
+          DOCKER_CONFIG: ${{ runner.temp }}/agenthon-final-anonymous-client
+          IMAGE_REF: ghcr.io/he-yufeng/agenthon-t1-agent@sha256:0f74d9bdd86d8ed19e7387d3bd2144c1a956602a41390ec70df55f1a6e86da8e
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = x86_64
+          test ! -e "$DOCKER_CONFIG"
+          mkdir "$DOCKER_CONFIG"
+          if docker --config "$DOCKER_CONFIG" image inspect "$IMAGE_REF" >/dev/null 2>&1; then
+            echo "REFUSED_TARGET_ALREADY_IN_DAEMON_CACHE"
+            exit 2
+          fi
+          echo "ANONYMOUS_PULL_STARTED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          timeout --signal=TERM --kill-after=10s 540s docker --config "$DOCKER_CONFIG" pull --platform linux/amd64 "$IMAGE_REF"
+          test ! -e "$DOCKER_CONFIG/config.json"
+          python3 - <<'PY'
+          import json
+          import os
+          import platform
+          import subprocess
+          from datetime import datetime, timezone
+          ref = os.environ['IMAGE_REF']
+          raw = subprocess.run(['docker', '--config', os.environ['DOCKER_CONFIG'],
+                                'image', 'inspect', ref], check=True,
+                               capture_output=True, text=True, timeout=10).stdout
+          rows = json.loads(raw)
+          assert len(rows) == 1
+          image = rows[0]
+          settings = image['Config']
+          assert image['Id'] == 'sha256:db3f96ffc5d279b55ea9e14a0fc79e58de9580aeaf3009e846f09c93d4b39fe3'
+          assert image['Os'] == 'linux' and image['Architecture'] == 'amd64'
+          assert ref in image['RepoDigests']
+          assert settings['Labels']['qfbench2.interface_version'] == '2.0'
+          assert settings['Entrypoint'] == ['python', '/agent/agent.py']
+          assert settings['Cmd'] == ['solve', '--task-dir', '/input', '--out', '/app/output']
+          assert settings.get('Volumes') is None
+          assert image['RootFS']['Type'] == 'layers' and len(image['RootFS']['Layers']) == 11
+          result = dict(status='PASS_FRESH_ANONYMOUS_DOCKER_PULL_AND_IMMUTABLE_CONFIG',
+                        reference=ref, config_id=image['Id'], platform='linux/amd64',
+                        rootfs_diff_ids=image['RootFS']['Layers'], layer_count=11,
+                        no_declared_or_inherited_volumes=True, interface_version='2.0',
+                        empty_explicit_client_config=True, registry_login_performed=False,
+                        image_build_push_or_execution_performed=False,
+                        model_calls=0, new_paid_resource_commitment_cny=0,
+                        host_python=platform.python_version(),
+                        finished_at_utc=datetime.now(timezone.utc).isoformat())
+          print('FINAL_ANONYMOUS_PULL_RESULT=' + json.dumps(result, sort_keys=True))
+          PY
